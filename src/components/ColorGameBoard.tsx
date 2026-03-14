@@ -5,6 +5,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useColorGameBoard } from './useColorGameBoard';
 import ColorChoice from './ColorChoice';
 import ColorGameResult from './ColorGameResult';
+import CelebrationEffect from './CelebrationEffect';
 
 const ColorGameBoard: React.FC = () => {
   const {
@@ -16,6 +17,7 @@ const ColorGameBoard: React.FC = () => {
     isCorrect,
     isGameOver,
     isPlaying,
+    showCelebration,
     handleSelect,
     handleNext,
     handleReplay,
@@ -48,6 +50,9 @@ const ColorGameBoard: React.FC = () => {
         pb: 4,
       }}
     >
+      {/* Celebration Effect */}
+      <CelebrationEffect isVisible={showCelebration} />
+
       {/* Progress */}
       <Box sx={{ width: '100%' }}>
         <Box
@@ -65,18 +70,43 @@ const ColorGameBoard: React.FC = () => {
               color: '#555',
             }}
           >
-            ข้อ {currentQuestionIndex + 1}/{totalQuestions}
+            Q {currentQuestionIndex + 1}/{totalQuestions}
           </Typography>
-          <Typography
+
+          {/* Animated Score Display */}
+          <Box
             sx={{
-              fontSize: 16,
-              fontWeight: 700,
-              fontFamily: "'Kanit', sans-serif",
-              color: '#0ABDE3',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              position: 'relative',
             }}
           >
-            ⭐ {score}
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: hasAnswered && isCorrect ? 28 : 20,
+                transition: 'font-size 0.3s ease',
+                animation: showCelebration ? 'starBurst 0.8s ease' : 'none',
+                filter: showCelebration ? 'brightness(1.3)' : 'none',
+              }}
+            >
+              🏆
+            </Typography>
+            <Typography
+              key={`score-${score}`}
+              sx={{
+                fontSize: 20,
+                fontWeight: 900,
+                fontFamily: "'Fredoka', sans-serif",
+                color: showCelebration ? '#FFD700' : '#0ABDE3',
+                animation: showCelebration ? 'scorePopUp 0.6s ease' : 'none',
+                textShadow: showCelebration ? '0 0 10px rgba(255, 215, 0, 0.6)' : 'none',
+                transition: 'color 0.3s ease, text-shadow 0.3s ease',
+              }}
+            >
+              {score}
+            </Typography>
+          </Box>
         </Box>
         <LinearProgress
           variant="determinate"
@@ -111,7 +141,7 @@ const ColorGameBoard: React.FC = () => {
             color: '#333',
           }}
         >
-          สีอะไรเอ่ย?
+          What color is this?
         </Typography>
         <IconButton
           onClick={handleReplay}
@@ -175,7 +205,7 @@ const ColorGameBoard: React.FC = () => {
             },
           }}
         >
-          {currentQuestionIndex < totalQuestions - 1 ? 'ต่อไป' : 'ดูผลคะแนน'}
+          {currentQuestionIndex < totalQuestions - 1 ? 'Next' : 'See Results'}
         </Button>
       )}
     </Box>

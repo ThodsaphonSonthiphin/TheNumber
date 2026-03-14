@@ -27,7 +27,7 @@ export const useColorGameResult = ({
   useEffect(() => {
     if (hasSpokeRef.current) return;
     hasSpokeRef.current = true;
-    speakText(`เก่งมาก ได้ ${score} คะแนน`, 'th-TH', 0.8);
+    speakText(`Great job! You got ${score} points`, 'en-US', 0.8);
   }, [score]);
 
   const handlePlayAgain = useCallback(() => {

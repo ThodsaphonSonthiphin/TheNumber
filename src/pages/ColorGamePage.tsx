@@ -23,7 +23,7 @@ const ColorGamePage: React.FC = () => {
               fontSize: 20,
             }}
           >
-            เกมทายสี
+            Color Quiz
           </Typography>
           <Box sx={{ width: 48 }} />
         </Toolbar>

@@ -9,6 +9,7 @@ import {
 import { colorsData } from '../data/colors';
 import { generateRound } from '../utils/colorGameUtils';
 import { speakText } from '../utils/speech';
+import { useCelebrationEffect } from './useCelebrationEffect';
 
 export const useColorGameBoard = () => {
   const dispatch = useAppDispatch();
@@ -24,12 +25,14 @@ export const useColorGameBoard = () => {
   } = useAppSelector((state) => state.colorGame);
 
   const abortRef = useRef(false);
+  const { isVisible: showCelebration, trigger: triggerCelebration } =
+    useCelebrationEffect(1500);
 
   const speakQuestion = useCallback(
-    async (nameTh: string) => {
+    async (nameEn: string) => {
       abortRef.current = false;
       dispatch(setPlaying(true));
-      await speakText(`สีอะไรเอ่ย ${nameTh}`, 'th-TH', 0.7);
+      await speakText(`What color is this? ${nameEn}`, 'en-US', 0.7);
       if (!abortRef.current) {
         dispatch(setPlaying(false));
       }
@@ -46,7 +49,7 @@ export const useColorGameBoard = () => {
     if (questions.length === 0 || isGameOver) return;
     const currentQuestion = questions[currentQuestionIndex];
     if (!currentQuestion) return;
-    speakQuestion(currentQuestion.correctColor.nameTh);
+    speakQuestion(currentQuestion.correctColor.nameEn);
 
     return () => {
       abortRef.current = true;
@@ -70,12 +73,20 @@ export const useColorGameBoard = () => {
       }
 
       if (colorId === currentQuestion.correctColor.id) {
-        await speakText('ถูกต้อง เก่งมาก', 'th-TH', 0.9);
+        triggerCelebration();
+        await speakText('Correct! Great job!', 'en-US', 0.9);
       } else {
-        await speakText('ลองใหม่นะ', 'th-TH', 0.9);
+        await speakText('Try again!', 'en-US', 0.9);
       }
     },
-    [selectedChoiceId, isPlaying, questions, currentQuestionIndex, dispatch],
+    [
+      selectedChoiceId,
+      isPlaying,
+      questions,
+      currentQuestionIndex,
+      dispatch,
+      triggerCelebration,
+    ],
   );
 
   const handleNext = useCallback(() => {
@@ -86,7 +97,7 @@ export const useColorGameBoard = () => {
     if (isPlaying || questions.length === 0) return;
     const currentQuestion = questions[currentQuestionIndex];
     if (!currentQuestion) return;
-    speakQuestion(currentQuestion.correctColor.nameTh);
+    speakQuestion(currentQuestion.correctColor.nameEn);
   }, [isPlaying, questions, currentQuestionIndex, speakQuestion]);
 
   const handleRestart = useCallback(() => {
@@ -107,6 +118,7 @@ export const useColorGameBoard = () => {
     isCorrect,
     isGameOver,
     isPlaying,
+    showCelebration,
     handleSelect,
     handleNext,
     handleReplay,
