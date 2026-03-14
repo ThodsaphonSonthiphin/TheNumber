@@ -111,6 +111,55 @@ const HomePage: React.FC = () => {
         </Typography>
       </Button>
 
+      {/* Alphabet Menu Button */}
+      <Button
+        onClick={() => navigate('/alphabet')}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          p: { xs: 2, sm: 2.5, md: 3 },
+          backgroundColor: '#fff',
+          border: '2px solid #eee',
+          borderRadius: { xs: '16px', sm: '20px', md: '24px' },
+          cursor: 'pointer',
+          gap: { xs: 1.5, sm: 2 },
+          boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          textTransform: 'none',
+          justifyContent: 'flex-start',
+          '&:hover': {
+            backgroundColor: '#fafafa',
+          },
+        }}
+      >
+        <Typography sx={{ fontSize: { xs: '32px', sm: '40px', md: '48px' }, lineHeight: 1 }}>
+          🔤
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1 }}>
+          <Typography
+            sx={{
+              fontSize: { xs: '18px', sm: '22px', md: '26px' },
+              fontWeight: 700,
+              color: '#333',
+            }}
+          >
+            ก-ฮ พยัญชนะ
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: { xs: '12px', sm: '14px', md: '16px' },
+              color: '#999',
+            }}
+          >
+            เรียนรู้พยัญชนะไทย กับเสียงสัตว์
+          </Typography>
+        </Box>
+        <Typography sx={{ fontSize: { xs: '16px', sm: '20px' }, color: '#ccc' }}>
+          ▶
+        </Typography>
+      </Button>
+
       {/* Number Grid */}
       <Box sx={{ width: '100%' }}>
         <Typography
