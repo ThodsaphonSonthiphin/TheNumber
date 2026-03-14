@@ -1,8 +1,15 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { finishCounting } from '../store/flashCardSlice';
 import { numbersData } from '../data/numbers';
 import { speakText, thaiCountingWords } from '../utils/speech';
+
+const waitForPaint = (): Promise<void> =>
+  new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => resolve());
+    });
+  });
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -18,50 +25,51 @@ export const useCountingAnimation = () => {
   const [animatingIndex, setAnimatingIndex] = useState<number | null>(null);
   const cancelledRef = useRef(false);
 
-  // Reset local state when card changes or counting restarts
+  // Reset when card changes
   useEffect(() => {
     setDisplayCount(0);
     setAnimatingIndex(null);
-    cancelledRef.current = false;
-  }, [currentIndex, isCounting]);
+  }, [currentIndex]);
 
-  // Single async loop: show emoji → speak → next
-  const runCounting = useCallback(async () => {
-    cancelledRef.current = false;
-
-    for (let i = 0; i < targetNumber; i++) {
-      if (cancelledRef.current) return;
-
-      // Show emoji
-      setDisplayCount(i + 1);
-      setAnimatingIndex(i);
-
-      // Wait for animation to render
-      await wait(150);
-      if (cancelledRef.current) return;
-
-      // Speak the number
-      await speakText(thaiCountingWords[i], 'th-TH', 0.9);
-      if (cancelledRef.current) return;
-
-      // Brief pause between counts
-      await wait(200);
-    }
-
-    if (!cancelledRef.current) {
-      dispatch(finishCounting());
-    }
-  }, [targetNumber, dispatch]);
-
-  // Start counting loop when isCounting becomes true
+  // Single effect: start async counting loop when isCounting becomes true
   useEffect(() => {
-    if (isCounting && isRevealed) {
-      runCounting();
-    }
+    if (!isCounting || !isRevealed) return;
+
+    cancelledRef.current = false;
+    setDisplayCount(0);
+    setAnimatingIndex(null);
+
+    const run = async () => {
+      for (let i = 0; i < targetNumber; i++) {
+        if (cancelledRef.current) return;
+
+        // 1. Show emoji
+        setDisplayCount(i + 1);
+        setAnimatingIndex(i);
+
+        // 2. Wait for browser to actually paint the emoji
+        await waitForPaint();
+        if (cancelledRef.current) return;
+
+        // 3. Speak the number
+        await speakText(thaiCountingWords[i], 'th-TH', 0.9);
+        if (cancelledRef.current) return;
+
+        // 4. Brief pause before next
+        await wait(200);
+      }
+
+      if (!cancelledRef.current) {
+        dispatch(finishCounting());
+      }
+    };
+
+    run();
+
     return () => {
       cancelledRef.current = true;
     };
-  }, [isCounting, isRevealed, runCounting]);
+  }, [isCounting, isRevealed, targetNumber, dispatch]);
 
   return {
     numberData,
