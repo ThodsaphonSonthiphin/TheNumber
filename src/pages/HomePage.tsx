@@ -193,7 +193,7 @@ const HomePage: React.FC = () => {
               color: '#333',
             }}
           >
-            เกมทายสี
+            Color Quiz
           </Typography>
           <Typography
             sx={{
@@ -201,7 +201,7 @@ const HomePage: React.FC = () => {
               color: '#999',
             }}
           >
-            ฝึกเรียนรู้สีภาษาไทย
+            Learn colors in English
           </Typography>
         </Box>
         <Typography sx={{ fontSize: { xs: '16px', sm: '20px' }, color: '#ccc' }}>

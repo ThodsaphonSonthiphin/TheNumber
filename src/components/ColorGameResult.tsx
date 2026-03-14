@@ -11,9 +11,9 @@ interface ColorGameResultProps {
 }
 
 const messages = [
-  'พยายามอีกนิดนะ!',
-  'ดีมาก!',
-  'เก่งมากเลย!',
+  'Keep trying!',
+  'Good job!',
+  'Excellent!',
 ];
 
 const ColorGameResult: React.FC<ColorGameResultProps> = ({
@@ -87,7 +87,7 @@ const ColorGameResult: React.FC<ColorGameResultProps> = ({
             backgroundColor: '#0ABDE3',
           }}
         >
-          เล่นอีกครั้ง
+          Play Again
         </Button>
         <Button
           onClick={handleGoHome}
@@ -105,7 +105,7 @@ const ColorGameResult: React.FC<ColorGameResultProps> = ({
             borderColor: '#ccc',
           }}
         >
-          หน้าแรก
+          Home
         </Button>
       </Box>
     </Box>
