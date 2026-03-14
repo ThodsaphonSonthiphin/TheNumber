@@ -37,6 +37,16 @@ const HomePage: React.FC = () => {
         <span style={styles.menuArrow}>▶</span>
       </button>
 
+      {/* Alphabet Menu Button */}
+      <button onClick={() => navigate('/alphabet')} style={styles.menuButton}>
+        <span style={styles.menuIcon}>🔤</span>
+        <div style={styles.menuTextContainer}>
+          <span style={styles.menuTitle}>ก-ฮ พยัญชนะ</span>
+          <span style={styles.menuDesc}>เรียนรู้พยัญชนะไทย กับเสียงสัตว์</span>
+        </div>
+        <span style={styles.menuArrow}>▶</span>
+      </button>
+
       {/* Number Grid */}
       <div style={styles.gridContainer}>
         <h2 style={styles.gridTitle}>เลือกตัวเลข</h2>
