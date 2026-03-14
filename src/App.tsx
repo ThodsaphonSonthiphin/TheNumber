@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import HomePage from './pages/HomePage';
 import FlashCardPage from './pages/FlashCardPage';
 import AlphabetPage from './pages/AlphabetPage';
+import ColorGamePage from './pages/ColorGamePage';
 
 declare const __APP_VERSION__: string;
 declare const __COMMIT_HASH__: string;
@@ -28,6 +29,7 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/flashcards" element={<FlashCardPage />} />
           <Route path="/alphabet" element={<AlphabetPage />} />
+          <Route path="/color-game" element={<ColorGamePage />} />
         </Routes>
         <Typography
           sx={{
