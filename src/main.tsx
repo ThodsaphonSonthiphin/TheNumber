@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import App from './App';
+import { checkVersionAndClearCache } from './utils/versionCheck';
 import './index.css';
+
+checkVersionAndClearCache();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
