@@ -6,6 +6,7 @@ A React-based educational web app for teaching children numbers 1-10 in Thai and
 
 - React 19 + TypeScript 5.9
 - Vite 8 (build tool)
+- Vitest + Testing Library (testing)
 - Redux Toolkit (state management)
 - React Router DOM (routing)
 - Web Speech API (text-to-speech, no audio files)
@@ -23,21 +24,26 @@ src/
 │   ├── CountingAnimation.tsx        # Counting animation UI (pure presentation)
 │   └── useCountingAnimation.ts      # Counting logic (async loop + speech)
 ├── data/
-│   └── numbers.ts                   # Number data (1-10): digit, thai, english, emoji, color
+│   ├── numbers.ts                   # Number data (1-10): digit, thai, english, emoji, color
+│   └── numbers.test.ts              # Tests for number data
 ├── utils/
-│   └── speech.ts                    # speakText() utility + Thai counting words
+│   ├── speech.ts                    # speakText() utility + Thai counting words
+│   └── speech.test.ts               # Tests for speech utility
+├── test/
+│   └── setup.ts                     # Test setup (jest-dom matchers)
 ├── pages/
 │   ├── HomePage.tsx                 # Home page with number grid selector
 │   └── FlashCardPage.tsx            # Flash card page wrapper
 └── store/
     ├── index.ts                     # Redux store config
     ├── hooks.ts                     # Typed useAppSelector/useAppDispatch
-    └── flashCardSlice.ts            # Flash card state: currentIndex, isRevealed, isCounting, etc.
+    ├── flashCardSlice.ts            # Flash card state: currentIndex, isRevealed, isCounting, etc.
+    └── flashCardSlice.test.ts       # Tests for flash card slice
 ```
 
 ## Architecture Rules
 
-### Separate UI and Logic
+### 1. Separate UI and Logic
 
 Every component MUST separate concerns into two files:
 - **`useComponent.ts`** — Custom hook containing all logic (state, effects, handlers, async operations)
@@ -54,12 +60,61 @@ components/
 
 **Why**: Prevents bugs from mixing async logic (speech, timers) with React render cycles. Makes testing and debugging easier.
 
+### 2. TDD (Test-Driven Development)
+
+Follow the Red → Green → Refactor cycle for all changes:
+
+1. **Red** — Write a failing test FIRST that describes the expected behavior
+2. **Green** — Write the minimum code to make the test pass
+3. **Refactor** — Clean up the code while keeping tests green
+
+#### What to test
+
+| Layer | File pattern | What to test |
+|-------|-------------|-------------|
+| Redux slices | `*.test.ts` next to slice | Every action: state transitions, edge cases |
+| Utils | `*.test.ts` next to util | Pure functions: inputs → outputs |
+| Hooks | `*.test.ts` next to hook | State changes, dispatch calls, async behavior |
+| Components | `*.test.tsx` next to component | Rendering, user interactions, conditional display |
+
+#### Test file placement
+
+Place test files **next to the file they test**:
+```
+speech.ts          ← source
+speech.test.ts     ← test (same directory)
+```
+
+#### Running tests
+
+```bash
+npm test            # Run all tests once
+npm run test:watch  # Run tests in watch mode (during development)
+```
+
+#### TDD workflow example
+
+```bash
+# 1. Write failing test first
+# 2. Run tests — see it fail (Red)
+npm test
+
+# 3. Write code to pass the test (Green)
+# 4. Run tests — see it pass
+npm test
+
+# 5. Refactor if needed, tests must stay green
+npm test
+```
+
 ## Commands
 
 - `npm run dev` — Start dev server
 - `npm run build` — TypeScript check + Vite production build
 - `npx vite build` — Vite build only (skip tsc)
 - `npm run preview` — Preview production build
+- `npm test` — Run all tests once
+- `npm run test:watch` — Run tests in watch mode
 
 ## Key Patterns
 
