@@ -2,6 +2,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useCelebrationEffect } from './useCelebrationEffect';
 
+vi.mock('canvas-confetti', () => ({
+  default: vi.fn(),
+}));
+
+vi.mock('../utils/soundEffects', () => ({
+  playCelebrationSound: vi.fn(),
+}));
+
 describe('useCelebrationEffect', () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -42,7 +50,7 @@ describe('useCelebrationEffect', () => {
     expect(result.current.isVisible).toBe(false);
   });
 
-  it('should use default duration of 1500ms', () => {
+  it('should use default duration of 2500ms', () => {
     const { result } = renderHook(() => useCelebrationEffect());
 
     act(() => {
@@ -50,7 +58,7 @@ describe('useCelebrationEffect', () => {
     });
 
     act(() => {
-      vi.advanceTimersByTime(1499);
+      vi.advanceTimersByTime(2499);
     });
     expect(result.current.isVisible).toBe(true);
 
@@ -87,5 +95,19 @@ describe('useCelebrationEffect', () => {
       vi.advanceTimersByTime(200);
     });
     expect(result.current.isVisible).toBe(false);
+  });
+
+  it('should play celebration sound and fire confetti when triggered', async () => {
+    const confetti = (await import('canvas-confetti')).default;
+    const { playCelebrationSound } = await import('../utils/soundEffects');
+
+    const { result } = renderHook(() => useCelebrationEffect());
+
+    act(() => {
+      result.current.trigger();
+    });
+
+    expect(playCelebrationSound).toHaveBeenCalled();
+    expect(confetti).toHaveBeenCalled();
   });
 });
