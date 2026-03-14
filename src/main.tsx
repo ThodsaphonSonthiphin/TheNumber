@@ -6,7 +6,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { store } from './store';
 import theme from './theme';
 import App from './App';
+import { checkVersionAndClearCache } from './utils/versionCheck';
 import './index.css';
+
+checkVersionAndClearCache();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
