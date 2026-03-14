@@ -1,5 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import { numbersData } from '../data/numbers';
 import { useAppDispatch } from '../store/hooks';
 import { setCurrentIndex } from '../store/flashCardSlice';
@@ -19,160 +23,156 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        px: { xs: 1.5, sm: 2, md: 3, lg: 4 },
+        py: { xs: 2, sm: 3, md: 4 },
+        gap: { xs: 2, sm: 3, md: 4 },
+        width: '100%',
+        maxWidth: { xs: '100%', sm: '400px', md: '560px', lg: '640px' },
+        mx: 'auto',
+      }}
+    >
       {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.logo}>🔢</div>
-        <h1 style={styles.title}>เรียนรู้ตัวเลข</h1>
-        <p style={styles.subtitle}>สำหรับเด็ก 1-10</p>
-      </div>
+      <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+        <Typography sx={{ fontSize: { xs: '48px', sm: '64px', md: '80px' }, mb: 1, lineHeight: 1 }}>
+          🔢
+        </Typography>
+        <Typography
+          variant="h4"
+          sx={{
+            fontSize: { xs: '26px', sm: '32px', md: '38px' },
+            fontWeight: 900,
+            color: '#333',
+          }}
+        >
+          เรียนรู้ตัวเลข
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: { xs: '15px', sm: '18px', md: '22px' },
+            fontWeight: 400,
+            color: '#888',
+          }}
+        >
+          สำหรับเด็ก 1-10
+        </Typography>
+      </Box>
 
       {/* Flash Card Menu Button */}
-      <button onClick={handleStartFlashCards} style={styles.menuButton}>
-        <span style={styles.menuIcon}>🃏</span>
-        <div style={styles.menuTextContainer}>
-          <span style={styles.menuTitle}>Flash Cards</span>
-          <span style={styles.menuDesc}>เรียนรู้ตัวเลขทีละตัว</span>
-        </div>
-        <span style={styles.menuArrow}>▶</span>
-      </button>
+      <Button
+        onClick={handleStartFlashCards}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          p: { xs: 2, sm: 2.5, md: 3 },
+          backgroundColor: '#fff',
+          border: '2px solid #eee',
+          borderRadius: { xs: '16px', sm: '20px', md: '24px' },
+          cursor: 'pointer',
+          gap: { xs: 1.5, sm: 2 },
+          boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          textTransform: 'none',
+          justifyContent: 'flex-start',
+          '&:hover': {
+            backgroundColor: '#fafafa',
+          },
+        }}
+      >
+        <Typography sx={{ fontSize: { xs: '32px', sm: '40px', md: '48px' }, lineHeight: 1 }}>
+          🃏
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1 }}>
+          <Typography
+            sx={{
+              fontSize: { xs: '18px', sm: '22px', md: '26px' },
+              fontWeight: 700,
+              color: '#333',
+            }}
+          >
+            Flash Cards
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: { xs: '12px', sm: '14px', md: '16px' },
+              color: '#999',
+            }}
+          >
+            เรียนรู้ตัวเลขทีละตัว
+          </Typography>
+        </Box>
+        <Typography sx={{ fontSize: { xs: '16px', sm: '20px' }, color: '#ccc' }}>
+          ▶
+        </Typography>
+      </Button>
 
       {/* Number Grid */}
-      <div style={styles.gridContainer}>
-        <h2 style={styles.gridTitle}>เลือกตัวเลข</h2>
-        <div style={styles.grid}>
+      <Box sx={{ width: '100%' }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontSize: { xs: '17px', sm: '20px', md: '24px' },
+            fontWeight: 700,
+            color: '#555',
+            mb: { xs: 1, sm: 1.5 },
+            textAlign: 'center',
+          }}
+        >
+          เลือกตัวเลข
+        </Typography>
+        <Grid container spacing={{ xs: 1, sm: 1.25, md: 1.75 }}>
           {numbersData.map((num, index) => (
-            <button
-              key={num.id}
-              onClick={() => handleSelectNumber(index)}
-              style={{
-                ...styles.gridItem,
-                backgroundColor: num.color,
-              }}
-            >
-              <span style={styles.gridDigit}>{num.digit}</span>
-              <span style={styles.gridEmoji}>{num.emoji}</span>
-            </button>
+            <Grid size={{ xs: 2.4 }} key={num.id}>
+              <Button
+                onClick={() => handleSelectNumber(index)}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  aspectRatio: '1',
+                  width: '100%',
+                  minWidth: 0,
+                  borderRadius: { xs: '12px', sm: '16px', md: '20px' },
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 3px 10px rgba(0,0,0,0.15)',
+                  transition: 'transform 0.2s ease',
+                  gap: '2px',
+                  p: 0.5,
+                  backgroundColor: num.color,
+                  textTransform: 'none',
+                  '&:hover': {
+                    backgroundColor: num.color,
+                    opacity: 0.9,
+                  },
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: { xs: '22px', sm: '28px', md: '36px' },
+                    fontWeight: 900,
+                    color: '#fff',
+                    lineHeight: 1,
+                  }}
+                >
+                  {num.digit}
+                </Typography>
+                <Typography sx={{ fontSize: { xs: '14px', sm: '18px', md: '24px' }, lineHeight: 1 }}>
+                  {num.emoji}
+                </Typography>
+              </Button>
+            </Grid>
           ))}
-        </div>
-      </div>
-    </div>
+        </Grid>
+      </Box>
+    </Box>
   );
-};
-
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '24px 16px',
-    gap: '24px',
-    width: '100%',
-    maxWidth: '400px',
-    margin: '0 auto',
-  },
-  header: {
-    textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '4px',
-  },
-  logo: {
-    fontSize: '64px',
-    marginBottom: '8px',
-  },
-  title: {
-    fontSize: '32px',
-    fontWeight: 900,
-    fontFamily: "'Kanit', sans-serif",
-    color: '#333',
-    margin: 0,
-  },
-  subtitle: {
-    fontSize: '18px',
-    fontWeight: 400,
-    fontFamily: "'Kanit', sans-serif",
-    color: '#888',
-    margin: 0,
-  },
-  menuButton: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-    padding: '20px',
-    backgroundColor: '#fff',
-    border: '2px solid #eee',
-    borderRadius: '20px',
-    cursor: 'pointer',
-    gap: '16px',
-    boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-  },
-  menuIcon: {
-    fontSize: '40px',
-  },
-  menuTextContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    flex: 1,
-  },
-  menuTitle: {
-    fontSize: '22px',
-    fontWeight: 700,
-    fontFamily: "'Kanit', sans-serif",
-    color: '#333',
-  },
-  menuDesc: {
-    fontSize: '14px',
-    fontFamily: "'Kanit', sans-serif",
-    color: '#999',
-  },
-  menuArrow: {
-    fontSize: '20px',
-    color: '#ccc',
-  },
-  gridContainer: {
-    width: '100%',
-  },
-  gridTitle: {
-    fontSize: '20px',
-    fontWeight: 700,
-    fontFamily: "'Kanit', sans-serif",
-    color: '#555',
-    marginBottom: '12px',
-    textAlign: 'center',
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(5, 1fr)',
-    gap: '10px',
-  },
-  gridItem: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    aspectRatio: '1',
-    borderRadius: '16px',
-    border: 'none',
-    cursor: 'pointer',
-    boxShadow: '0 3px 10px rgba(0,0,0,0.15)',
-    transition: 'transform 0.2s ease',
-    gap: '2px',
-    padding: '4px',
-  },
-  gridDigit: {
-    fontSize: '28px',
-    fontWeight: 900,
-    fontFamily: "'Kanit', sans-serif",
-    color: '#fff',
-    lineHeight: 1,
-  },
-  gridEmoji: {
-    fontSize: '18px',
-  },
 };
 
 export default HomePage;
