@@ -64,6 +64,7 @@ const FlashCard: React.FC = () => {
             sx={{
               fontSize: { xs: '72px', sm: '96px', md: '120px' },
               fontWeight: 900,
+              fontFamily: "'Fredoka', sans-serif",
               lineHeight: 1,
               color: numberData.color,
             }}

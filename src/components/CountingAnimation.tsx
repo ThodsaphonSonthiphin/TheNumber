@@ -69,6 +69,7 @@ const CountingAnimation: React.FC = () => {
           sx={{
             fontSize: { xs: '36px', sm: '48px', md: '60px' },
             fontWeight: 900,
+            fontFamily: "'Fredoka', sans-serif",
             display: 'inline-block',
             color: numberData.color,
             transform: isCounting ? 'scale(1.2)' : 'scale(1)',
