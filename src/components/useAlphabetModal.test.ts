@@ -88,15 +88,20 @@ describe('useAlphabetModal', () => {
     });
   });
 
-  it('should call onClose after speech finishes (auto-close)', async () => {
+  it('should NOT auto-close after speech finishes', async () => {
     const onClose = vi.fn();
-    renderHook(() =>
+    const { result } = renderHook(() =>
       useAlphabetModal({ consonant: mockConsonantNoSound, onClose })
     );
 
+    // Wait for speech to finish
     await vi.waitFor(() => {
-      expect(onClose).toHaveBeenCalled();
+      expect(result.current.isSpeaking).toBe(false);
     });
+
+    // Modal should remain open, onClose should NOT be called
+    expect(onClose).not.toHaveBeenCalled();
+    expect(result.current.isOpen).toBe(true);
   });
 
   it('handleClose should cancel speech and call onClose', () => {
@@ -120,11 +125,7 @@ describe('useAlphabetModal', () => {
       useAlphabetModal({ consonant: mockConsonantNoSound, onClose })
     );
 
-    // Wait for initial speech and auto-close to finish
-    await vi.waitFor(() => {
-      expect(onClose).toHaveBeenCalled();
-    });
-
+    // Wait for initial speech to finish
     await vi.waitFor(() => {
       expect(result.current.isSpeaking).toBe(false);
     });

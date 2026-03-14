@@ -18,7 +18,7 @@ const AlphabetModal: React.FC<AlphabetModalProps> = ({ consonant, onClose }) => 
   return (
     <Dialog
       open={isOpen}
-      onClose={handleClose}
+      onClose={isSpeaking ? undefined : handleClose}
       maxWidth="xs"
       fullWidth
       PaperProps={{
