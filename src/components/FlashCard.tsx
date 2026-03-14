@@ -1,64 +1,19 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useAppSelector, useAppDispatch } from '../store/hooks';
-import { reveal, nextCard, prevCard, reset, finishPlaying } from '../store/flashCardSlice';
+import React from 'react';
 import { numbersData } from '../data/numbers';
+import { useFlashCard } from './useFlashCard';
 import CountingAnimation from './CountingAnimation';
 
-const speakText = (text: string, lang: string): Promise<void> => {
-  return new Promise((resolve) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang;
-    utterance.rate = 0.8;
-    utterance.pitch = 1.1;
-    utterance.volume = 1;
-    utterance.onend = () => resolve();
-    utterance.onerror = () => resolve();
-    speechSynthesis.speak(utterance);
-  });
-};
-
 const FlashCard: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const { currentIndex, isRevealed, isPlaying, isCounting } = useAppSelector(
-    (state) => state.flashCard
-  );
-  const numberData = numbersData[currentIndex];
-  const hasSpoken = useRef(false);
-
-  const handleReveal = useCallback(() => {
-    if (isPlaying) return;
-    dispatch(reveal());
-    hasSpoken.current = false;
-  }, [dispatch, isPlaying]);
-
-  // Speak after counting finishes
-  useEffect(() => {
-    if (isRevealed && !isCounting && isPlaying && !hasSpoken.current) {
-      hasSpoken.current = true;
-      const speak = async () => {
-        await speakText(numberData.thai, 'th-TH');
-        await new Promise((r) => setTimeout(r, 500));
-        await speakText(numberData.english, 'en-US');
-        dispatch(finishPlaying());
-      };
-      speak();
-    }
-  }, [isRevealed, isCounting, isPlaying, numberData, dispatch]);
-
-  const handleNext = () => {
-    if (isPlaying) return;
-    dispatch(nextCard());
-  };
-
-  const handlePrev = () => {
-    if (isPlaying) return;
-    dispatch(prevCard());
-  };
-
-  const handleReset = () => {
-    speechSynthesis.cancel();
-    dispatch(reset());
-  };
+  const {
+    currentIndex,
+    isRevealed,
+    isPlaying,
+    numberData,
+    handleReveal,
+    handleNext,
+    handlePrev,
+    handleReset,
+  } = useFlashCard();
 
   return (
     <div style={styles.wrapper}>
