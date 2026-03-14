@@ -26,7 +26,7 @@ export const useColorGameBoard = () => {
 
   const abortRef = useRef(false);
   const { isVisible: showCelebration, trigger: triggerCelebration } =
-    useCelebrationEffect(1500);
+    useCelebrationEffect();
 
   const speakQuestion = useCallback(
     async (nameEn: string) => {
