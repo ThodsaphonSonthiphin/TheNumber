@@ -1,4 +1,6 @@
 import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { useCountingAnimation } from './useCountingAnimation';
 
 const CountingAnimation: React.FC = () => {
@@ -16,16 +18,36 @@ const CountingAnimation: React.FC = () => {
   const items = Array.from({ length: targetNumber }, (_, i) => i);
 
   return (
-    <div style={styles.container}>
-      <div style={styles.emojiGrid}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: { xs: 1.5, sm: 2, md: 2.5 },
+        p: { xs: 1.5, sm: 2, md: 2.5 },
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: { xs: 1, sm: 1.5, md: 2 },
+          maxWidth: { xs: '220px', sm: '280px', md: '360px' },
+        }}
+      >
         {items.map((_, i) => {
           const isVisible = i < displayCount;
           const isNew = i === animatingIndex;
           return (
-            <div
+            <Box
               key={i}
-              style={{
-                ...styles.emojiItem,
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: { xs: '36px', sm: '48px', md: '60px' },
+                height: { xs: '36px', sm: '48px', md: '60px' },
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible
                   ? isNew
@@ -35,61 +57,29 @@ const CountingAnimation: React.FC = () => {
                 transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
               }}
             >
-              <span style={styles.emoji}>{numberData.emoji}</span>
-            </div>
+              <Typography sx={{ fontSize: { xs: '28px', sm: '36px', md: '44px' }, lineHeight: 1 }}>
+                {numberData.emoji}
+              </Typography>
+            </Box>
           );
         })}
-      </div>
-      <div style={styles.countDisplay}>
-        <span
-          style={{
-            ...styles.countText,
+      </Box>
+      <Box sx={{ mt: 1 }}>
+        <Typography
+          sx={{
+            fontSize: { xs: '36px', sm: '48px', md: '60px' },
+            fontWeight: 900,
+            display: 'inline-block',
             color: numberData.color,
             transform: isCounting ? 'scale(1.2)' : 'scale(1)',
             transition: 'transform 0.3s ease',
           }}
         >
           {displayCount}
-        </span>
-      </div>
-    </div>
+        </Typography>
+      </Box>
+    </Box>
   );
-};
-
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '16px',
-    padding: '16px',
-  },
-  emojiGrid: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '12px',
-    maxWidth: '280px',
-  },
-  emojiItem: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '48px',
-    height: '48px',
-  },
-  emoji: {
-    fontSize: '36px',
-  },
-  countDisplay: {
-    marginTop: '8px',
-  },
-  countText: {
-    fontSize: '48px',
-    fontWeight: 900,
-    fontFamily: "'Kanit', sans-serif",
-    display: 'inline-block',
-  },
 };
 
 export default CountingAnimation;
