@@ -11,7 +11,7 @@ export const useAlphabetModal = ({ consonant, onClose }: UseAlphabetModalProps) 
   const [isSpeaking, setIsSpeaking] = useState(false);
   const abortRef = useRef(false);
 
-  const speakConsonant = useCallback(async (c: ThaiConsonant, autoClose: boolean) => {
+  const speakConsonant = useCallback(async (c: ThaiConsonant) => {
     setIsSpeaking(true);
     await speakText(`${c.letter} ${c.word}`, 'th-TH', 0.7);
 
@@ -24,17 +24,14 @@ export const useAlphabetModal = ({ consonant, onClose }: UseAlphabetModalProps) 
 
     if (!abortRef.current) {
       setIsSpeaking(false);
-      if (autoClose) {
-        onClose();
-      }
     }
-  }, [onClose]);
+  }, []);
 
   useEffect(() => {
     if (!consonant) return;
 
     abortRef.current = false;
-    speakConsonant(consonant, true);
+    speakConsonant(consonant);
 
     return () => {
       abortRef.current = true;
@@ -52,7 +49,7 @@ export const useAlphabetModal = ({ consonant, onClose }: UseAlphabetModalProps) 
   const handleReplay = useCallback(async () => {
     if (!consonant || isSpeaking) return;
     abortRef.current = false;
-    await speakConsonant(consonant, false);
+    await speakConsonant(consonant);
   }, [consonant, isSpeaking, speakConsonant]);
 
   return {
