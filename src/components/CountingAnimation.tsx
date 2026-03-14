@@ -1,7 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { incrementCount, finishCounting } from '../store/flashCardSlice';
 import { numbersData } from '../data/numbers';
+
+const thaiCountingWords = [
+  'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า',
+  'หก', 'เจ็ด', 'แปด', 'เก้า', 'สิบ',
+];
+
+const speakText = (text: string, lang: string, rate = 0.8): Promise<void> => {
+  return new Promise((resolve) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    utterance.rate = rate;
+    utterance.pitch = 1.1;
+    utterance.volume = 1;
+    utterance.onend = () => resolve();
+    utterance.onerror = () => resolve();
+    speechSynthesis.speak(utterance);
+  });
+};
 
 const CountingAnimation: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -11,15 +29,29 @@ const CountingAnimation: React.FC = () => {
   const numberData = numbersData[currentIndex];
   const targetNumber = numberData.digit;
   const [animatingIndex, setAnimatingIndex] = useState<number | null>(null);
+  const isSpeaking = useRef(false);
+
+  const speakAndCount = useCallback(async () => {
+    if (isSpeaking.current) return;
+    isSpeaking.current = true;
+
+    const word = thaiCountingWords[currentCount];
+    if (word) {
+      await speakText(word, 'th-TH', 0.9);
+    }
+
+    dispatch(incrementCount());
+    setAnimatingIndex(currentCount);
+    isSpeaking.current = false;
+  }, [currentCount, dispatch]);
 
   useEffect(() => {
     if (!isCounting || !isRevealed) return;
 
     if (currentCount < targetNumber) {
       const timer = setTimeout(() => {
-        dispatch(incrementCount());
-        setAnimatingIndex(currentCount);
-      }, 600);
+        speakAndCount();
+      }, 300);
       return () => clearTimeout(timer);
     } else {
       const timer = setTimeout(() => {
@@ -27,7 +59,7 @@ const CountingAnimation: React.FC = () => {
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [isCounting, isRevealed, currentCount, targetNumber, dispatch]);
+  }, [isCounting, isRevealed, currentCount, targetNumber, dispatch, speakAndCount]);
 
   if (!isRevealed) return null;
 
