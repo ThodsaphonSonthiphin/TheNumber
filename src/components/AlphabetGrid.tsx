@@ -45,12 +45,9 @@ const AlphabetGrid: React.FC = () => {
                   gap: 0.3,
                 }}
               >
-                <Typography sx={{ fontSize: 22, lineHeight: 1 }}>
-                  {consonant.emoji}
-                </Typography>
                 <Typography
                   sx={{
-                    fontSize: 20,
+                    fontSize: 40,
                     fontWeight: 900,
                     fontFamily: "'Kanit', sans-serif",
                     color: '#fff',
