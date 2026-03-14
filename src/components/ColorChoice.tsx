@@ -67,6 +67,21 @@ const ColorChoice: React.FC<ColorChoiceProps> = ({
       <Typography sx={{ fontSize: 32, lineHeight: 1 }}>
         {color.emoji}
       </Typography>
+      <Typography
+        sx={{
+          fontSize: 16,
+          fontWeight: 700,
+          fontFamily: "'Kanit', sans-serif",
+          color: isWhite || color.hex.toLowerCase() === '#feca57' ? '#555' : '#fff',
+          textShadow:
+            isWhite || color.hex.toLowerCase() === '#feca57'
+              ? 'none'
+              : '0 1px 3px rgba(0,0,0,0.3)',
+          lineHeight: 1,
+        }}
+      >
+        {color.nameEn}
+      </Typography>
       {showResult && isCorrectChoice && (
         <Box
           sx={{
