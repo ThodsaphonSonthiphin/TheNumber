@@ -124,6 +124,69 @@ npm test
 - **Animations**: CSS keyframes in `index.css` (fadeInUp, bounce, pop).
 - **Build-time constants**: `__APP_VERSION__` and `__COMMIT_HASH__` injected via `vite.config.ts` define.
 
+### 3. Gitflow Branching Strategy
+
+ทุกการพัฒนา **ต้อง** ใช้ Gitflow branching model:
+
+#### Branch types
+
+| Branch | ใช้ทำอะไร | แตกมาจาก | Merge กลับไป |
+|--------|----------|----------|-------------|
+| `main` | Production-ready code | — | — |
+| `develop` | Integration branch สำหรับ feature ถัดไป | `main` | `main` (ผ่าน release) |
+| `feature/*` | พัฒนา feature ใหม่ | `develop` | `develop` |
+| `release/*` | เตรียม release ใหม่ (bump version, fix bugs) | `develop` | `main` + `develop` |
+| `hotfix/*` | แก้ bug เร่งด่วนบน production | `main` | `main` + `develop` |
+
+#### Workflow
+
+1. **เริ่มทำ feature ใหม่**
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/my-feature
+   ```
+
+2. **พัฒนาเสร็จ → merge กลับ develop**
+   ```bash
+   git checkout develop
+   git merge --no-ff feature/my-feature
+   git branch -d feature/my-feature
+   ```
+
+3. **เตรียม release**
+   ```bash
+   git checkout develop
+   git checkout -b release/1.0.0
+   # bump version, final fixes
+   git checkout main
+   git merge --no-ff release/1.0.0
+   git tag -a v1.0.0
+   git checkout develop
+   git merge --no-ff release/1.0.0
+   git branch -d release/1.0.0
+   ```
+
+4. **Hotfix เร่งด่วน**
+   ```bash
+   git checkout main
+   git checkout -b hotfix/fix-description
+   # แก้ bug
+   git checkout main
+   git merge --no-ff hotfix/fix-description
+   git tag -a v1.0.1
+   git checkout develop
+   git merge --no-ff hotfix/fix-description
+   git branch -d hotfix/fix-description
+   ```
+
+#### Rules
+
+- **ห้าม** commit ตรงไปที่ `main` หรือ `develop` โดยไม่ผ่าน branch
+- ใช้ `--no-ff` (no fast-forward) เสมอเมื่อ merge เพื่อเก็บประวัติ branch ไว้
+- ตั้งชื่อ branch ให้สื่อความหมาย เช่น `feature/add-sound-effects`, `hotfix/fix-speech-crash`
+- ลบ branch ที่ merge แล้วเพื่อความสะอาด
+
 ## Flash Card Flow
 
 1. Card displays the number, Thai name, and English name clearly
