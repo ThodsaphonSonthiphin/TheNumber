@@ -66,33 +66,21 @@ const FlashCard: React.FC = () => {
       <div
         style={{
           ...styles.card,
-          background: isRevealed
-            ? `linear-gradient(135deg, ${numberData.color}22, ${numberData.color}44)`
-            : `linear-gradient(135deg, ${numberData.color}44, ${numberData.color}66)`,
+          background: `linear-gradient(135deg, ${numberData.color}22, ${numberData.color}44)`,
           borderColor: numberData.color,
         }}
       >
-        {!isRevealed ? (
-          <div style={styles.questionSide}>
-            <div style={styles.questionMark}>❓</div>
-            <div style={{ ...styles.digitHidden, color: numberData.color }}>
-              {numberData.digit}
-            </div>
-            <p style={styles.hintText}>เลขนี้คือเลขอะไร?</p>
+        <div style={styles.revealSide}>
+          <div style={{ ...styles.digitRevealed, color: numberData.color }}>
+            {numberData.digit}
           </div>
-        ) : (
-          <div style={styles.revealSide}>
-            <div style={{ ...styles.digitRevealed, color: numberData.color }}>
-              {numberData.digit}
-            </div>
-            <div style={styles.nameRow}>
-              <span style={styles.thaiName}>{numberData.thai}</span>
-              <span style={styles.separator}>•</span>
-              <span style={styles.englishName}>{numberData.english}</span>
-            </div>
-            <CountingAnimation />
+          <div style={styles.nameRow}>
+            <span style={styles.thaiName}>{numberData.thai}</span>
+            <span style={styles.separator}>•</span>
+            <span style={styles.englishName}>{numberData.english}</span>
           </div>
-        )}
+          {isRevealed && <CountingAnimation />}
+        </div>
       </div>
 
       {/* Action Buttons */}
@@ -100,16 +88,25 @@ const FlashCard: React.FC = () => {
         {!isRevealed ? (
           <button
             onClick={handleReveal}
+            disabled={isPlaying}
             style={{
               ...styles.revealButton,
               backgroundColor: numberData.color,
+              opacity: isPlaying ? 0.5 : 1,
             }}
           >
-            🔔 เฉลย
+            🔊 นับเลข
           </button>
         ) : (
-          <button onClick={handleReset} style={styles.resetButton}>
-            🔄 ดูใหม่
+          <button
+            onClick={handleReset}
+            disabled={isPlaying}
+            style={{
+              ...styles.resetButton,
+              opacity: isPlaying ? 0.5 : 1,
+            }}
+          >
+            🔄 นับใหม่
           </button>
         )}
       </div>
@@ -167,31 +164,6 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
     transition: 'all 0.4s ease',
     overflow: 'hidden',
-  },
-  questionSide: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '16px',
-    padding: '32px',
-  },
-  questionMark: {
-    fontSize: '64px',
-    animation: 'bounce 1s ease infinite',
-  },
-  digitHidden: {
-    fontSize: '120px',
-    fontWeight: 900,
-    fontFamily: "'Kanit', sans-serif",
-    lineHeight: 1,
-    filter: 'blur(20px)',
-    userSelect: 'none',
-  },
-  hintText: {
-    fontSize: '20px',
-    fontFamily: "'Kanit', sans-serif",
-    color: '#666',
-    fontWeight: 600,
   },
   revealSide: {
     display: 'flex',
