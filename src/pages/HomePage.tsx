@@ -206,6 +206,7 @@ const HomePage: React.FC = () => {
                   sx={{
                     fontSize: { xs: '22px', sm: '28px', md: '36px' },
                     fontWeight: 900,
+                    fontFamily: "'Fredoka', sans-serif",
                     color: '#fff',
                     lineHeight: 1,
                   }}
