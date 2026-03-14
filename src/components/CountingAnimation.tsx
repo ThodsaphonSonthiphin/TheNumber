@@ -35,13 +35,16 @@ const CountingAnimation: React.FC = () => {
     if (isSpeaking.current) return;
     isSpeaking.current = true;
 
+    // Show emoji first
+    dispatch(incrementCount());
+    setAnimatingIndex(currentCount);
+
+    // Then speak the number
     const word = thaiCountingWords[currentCount];
     if (word) {
       await speakText(word, 'th-TH', 0.9);
     }
 
-    dispatch(incrementCount());
-    setAnimatingIndex(currentCount);
     isSpeaking.current = false;
   }, [currentCount, dispatch]);
 
