@@ -13,6 +13,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Flash Cards', icon: '🃏', path: '/flashcards' },
   { label: 'ก-ฮ', icon: '🔤', path: '/alphabet' },
   { label: 'Color Quiz', icon: '🎨', path: '/color-game' },
+  { label: 'ครอบครัว', icon: '👨‍👩‍👧‍👦', path: '/family' },
 ];
 
 export const useNavBar = () => {
@@ -20,7 +21,11 @@ export const useNavBar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const activeIndex = NAV_ITEMS.findIndex((item) => item.path === location.pathname);
+  const activeIndex = NAV_ITEMS.findIndex((item) =>
+    item.path === '/'
+      ? location.pathname === '/'
+      : location.pathname.startsWith(item.path)
+  );
 
   const handleNavigate = (index: number) => {
     const item = NAV_ITEMS[index];

@@ -6,6 +6,8 @@ import HomePage from './pages/HomePage';
 import FlashCardPage from './pages/FlashCardPage';
 import AlphabetPage from './pages/AlphabetPage';
 import ColorGamePage from './pages/ColorGamePage';
+import FamilyPage from './pages/FamilyPage';
+import FamilyDetailPage from './pages/FamilyDetailPage';
 import NavBar from './components/NavBar';
 
 declare const __APP_VERSION__: string;
@@ -32,6 +34,8 @@ const App: React.FC = () => {
           <Route path="/flashcards" element={<FlashCardPage />} />
           <Route path="/alphabet" element={<AlphabetPage />} />
           <Route path="/color-game" element={<ColorGamePage />} />
+          <Route path="/family" element={<FamilyPage />} />
+          <Route path="/family/:id" element={<FamilyDetailPage />} />
         </Routes>
         <Typography
           sx={{

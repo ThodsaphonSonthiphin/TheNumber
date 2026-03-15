@@ -22,7 +22,7 @@ describe('NavBar', () => {
     vi.clearAllMocks();
   });
 
-  it('should render all 4 navigation items', () => {
+  it('should render all 5 navigation items', () => {
     render(<NavBar />);
     NAV_ITEMS.forEach((item) => {
       expect(screen.getByText(item.label)).toBeInTheDocument();
