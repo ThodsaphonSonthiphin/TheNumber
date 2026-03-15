@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import FlashCardPage from './pages/FlashCardPage';
 import AlphabetPage from './pages/AlphabetPage';
 import ColorGamePage from './pages/ColorGamePage';
+import NavBar from './components/NavBar';
 
 declare const __APP_VERSION__: string;
 declare const __COMMIT_HASH__: string;
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           boxShadow: '0 0 40px rgba(0,0,0,0.1)',
           position: 'relative',
           overflow: 'auto',
+          pb: '80px',
         }}
       >
         <Routes>
@@ -33,17 +35,17 @@ const App: React.FC = () => {
         </Routes>
         <Typography
           sx={{
-            position: 'fixed',
-            bottom: '4px',
-            right: '8px',
+            textAlign: 'center',
             fontSize: '10px',
             color: '#ccc',
             fontFamily: 'monospace',
+            py: 1,
           }}
         >
           v{__APP_VERSION__} • {__COMMIT_HASH__}
         </Typography>
       </Box>
+      <NavBar />
     </BrowserRouter>
   );
 };
