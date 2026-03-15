@@ -21,8 +21,8 @@ vi.mock('../store/flashCardSlice', () => ({
 import { useLocation } from 'react-router-dom';
 
 describe('NAV_ITEMS', () => {
-  it('should have 4 navigation items', () => {
-    expect(NAV_ITEMS).toHaveLength(4);
+  it('should have 5 navigation items', () => {
+    expect(NAV_ITEMS).toHaveLength(5);
   });
 
   it('should have correct paths', () => {
@@ -31,6 +31,7 @@ describe('NAV_ITEMS', () => {
       '/flashcards',
       '/alphabet',
       '/color-game',
+      '/family',
     ]);
   });
 });
@@ -62,6 +63,18 @@ describe('useNavBar', () => {
     vi.mocked(useLocation).mockReturnValue({ pathname: '/color-game', search: '', hash: '', state: null, key: '' });
     const { result } = renderHook(() => useNavBar());
     expect(result.current.activeIndex).toBe(3);
+  });
+
+  it('should return activeIndex 4 for /family route', () => {
+    vi.mocked(useLocation).mockReturnValue({ pathname: '/family', search: '', hash: '', state: null, key: '' });
+    const { result } = renderHook(() => useNavBar());
+    expect(result.current.activeIndex).toBe(4);
+  });
+
+  it('should return activeIndex 4 for /family/:id sub-route', () => {
+    vi.mocked(useLocation).mockReturnValue({ pathname: '/family/abc-123', search: '', hash: '', state: null, key: '' });
+    const { result } = renderHook(() => useNavBar());
+    expect(result.current.activeIndex).toBe(4);
   });
 
   it('should return navItems', () => {

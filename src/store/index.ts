@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import flashCardReducer from './flashCardSlice';
 import colorGameReducer from './colorGameSlice';
+import familyReducer from './familySlice';
 
 export const store = configureStore({
   reducer: {
     flashCard: flashCardReducer,
     colorGame: colorGameReducer,
+    family: familyReducer,
   },
 });
 
