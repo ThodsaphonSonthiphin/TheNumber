@@ -34,6 +34,7 @@ vi.mock('../store/hooks', () => ({
 vi.mock('../store/familySlice', () => ({
   addMember: (member: unknown) => ({ type: 'family/addMember', payload: member }),
   removeMember: (id: string) => ({ type: 'family/removeMember', payload: id }),
+  updateMember: (member: unknown) => ({ type: 'family/updateMember', payload: member }),
 }));
 
 describe('useFamilyDetail', () => {
@@ -95,5 +96,45 @@ describe('useFamilyDetail', () => {
     });
 
     expect(result.current.showAddDialog).toBe(true);
+  });
+
+  it('handleUpdateMember should dispatch updateMember with updated fields', () => {
+    const { result } = renderHook(() => useFamilyDetail());
+
+    act(() => {
+      result.current.handleUpdateMember('m1', { displayName: 'Alice Updated', avatarEmoji: '👦' });
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: 'family/updateMember',
+      payload: expect.objectContaining({
+        id: 'm1',
+        displayName: 'Alice Updated',
+        avatarEmoji: '👦',
+        role: 'child',
+        familyId: 'f1',
+      }),
+    });
+  });
+
+  it('handleUpdateMember should not dispatch if member not found', () => {
+    const { result } = renderHook(() => useFamilyDetail());
+
+    act(() => {
+      result.current.handleUpdateMember('nonexistent', { displayName: 'Test' });
+    });
+
+    expect(mockDispatch).not.toHaveBeenCalled();
+  });
+
+  it('should manage editingMemberId state', () => {
+    const { result } = renderHook(() => useFamilyDetail());
+    expect(result.current.editingMemberId).toBeNull();
+
+    act(() => {
+      result.current.setEditingMemberId('m1');
+    });
+
+    expect(result.current.editingMemberId).toBe('m1');
   });
 });

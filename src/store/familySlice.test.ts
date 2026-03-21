@@ -111,6 +111,22 @@ describe('familySlice', () => {
       state = reducer(state, updateMember(updated));
       expect(state.currentFamily!.members[0].displayName).toBe('Bob');
     });
+
+    it('should update member in families array', () => {
+      let state = reducer(undefined, setFamilies([mockFamily]));
+      state = reducer(state, setCurrentFamily(mockFamily));
+      const updated = { ...mockMember, displayName: 'Bob', avatarEmoji: '👦' };
+      state = reducer(state, updateMember(updated));
+      expect(state.families[0].members[0].displayName).toBe('Bob');
+      expect(state.families[0].members[0].avatarEmoji).toBe('👦');
+    });
+
+    it('should update member avatar emoji', () => {
+      let state = reducer(undefined, setCurrentFamily(mockFamily));
+      const updated = { ...mockMember, avatarEmoji: '👦' };
+      state = reducer(state, updateMember(updated));
+      expect(state.currentFamily!.members[0].avatarEmoji).toBe('👦');
+    });
   });
 
   describe('removeMember', () => {

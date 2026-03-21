@@ -54,6 +54,11 @@ const familySlice = createSlice({
         const index = state.currentFamily.members.findIndex((m) => m.id === action.payload.id);
         if (index !== -1) state.currentFamily.members[index] = action.payload;
       }
+      const family = state.families.find((f) => f.id === action.payload.familyId);
+      if (family) {
+        const index = family.members.findIndex((m) => m.id === action.payload.id);
+        if (index !== -1) family.members[index] = action.payload;
+      }
     },
     removeMember(state, action: PayloadAction<string>) {
       if (state.currentFamily) {

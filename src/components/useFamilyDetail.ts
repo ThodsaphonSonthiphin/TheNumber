@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { addMember, removeMember } from '../store/familySlice';
+import { addMember, removeMember, updateMember } from '../store/familySlice';
 import type { Member } from '../types/member';
 
 export const useFamilyDetail = () => {
@@ -8,6 +8,7 @@ export const useFamilyDetail = () => {
   const family = useAppSelector((state) => state.family.currentFamily);
   const members = family?.members ?? [];
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
 
   const handleAddMember = useCallback(
     (displayName: string, role: string, dateOfBirth: string, avatarEmoji: string) => {
@@ -30,8 +31,20 @@ export const useFamilyDetail = () => {
   const handleRemoveMember = useCallback(
     (memberId: string) => {
       dispatch(removeMember(memberId));
+      if (editingMemberId === memberId) {
+        setEditingMemberId(null);
+      }
     },
-    [dispatch]
+    [dispatch, editingMemberId]
+  );
+
+  const handleUpdateMember = useCallback(
+    (memberId: string, updates: Partial<Pick<Member, 'displayName' | 'avatarEmoji'>>) => {
+      const member = members.find((m) => m.id === memberId);
+      if (!member) return;
+      dispatch(updateMember({ ...member, ...updates }));
+    },
+    [dispatch, members]
   );
 
   return {
@@ -39,7 +52,10 @@ export const useFamilyDetail = () => {
     members,
     showAddDialog,
     setShowAddDialog,
+    editingMemberId,
+    setEditingMemberId,
     handleAddMember,
     handleRemoveMember,
+    handleUpdateMember,
   };
 };
